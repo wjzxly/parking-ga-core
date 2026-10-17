@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "parking-ga-core"
+version = "1.0.0"
+description = "停车场车位分配的遗传算法求解器：三维评分、PMX 排列编码、模拟退火扰动"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["genetic-algorithm", "parking", "optimization", "qap", "simulated-annealing"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.scripts]
+parking-ga = "parking_ga.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["parking_ga*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
