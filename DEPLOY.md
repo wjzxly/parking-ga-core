@@ -2,7 +2,15 @@
 
 ## 零、网络前提（中国大陆环境必看）
 
-本机实测：`github.com:443` **直连不通**（超时），但通过梯子（Clash 默认端口 7897）完全正常。因此推送前必须先让 git 走代理：
+本机实测结论：
+
+| 目标 | 结果 |
+| --- | --- |
+| `github.com:443` 直连 | ❌ 超时 |
+| `github.com:22`（SSH） | ✅ 通 |
+| `github.com:443` 经 Clash 7897 | ✅ 通 |
+
+因此 HTTPS 推送必须先让 git 走代理（**已配置好，无需重复操作**）：
 
 ```bash
 git config --global http.proxy http://127.0.0.1:7897
@@ -15,58 +23,62 @@ git config --global https.proxy http://127.0.0.1:7897
 git ls-remote https://github.com/git/git.git HEAD
 ```
 
-能打印出一串 commit SHA 就说明通了。如果只用 SSH（`git@github.com`），22 端口本身是通的，不依赖代理，但需要先配 SSH key。
+能打印出一串 commit SHA 就说明通了。
 
-> 梯子端口不一定是 7897。在 Clash / v2rayN 的设置里看「混合端口 / HTTP 端口」，换成对应的数字即可。
+> **端口不是固定的。** 梯子换节点或换客户端后端口可能变（Clash 默认 7897，v2rayN 常见 10809）。
+> 断网时先查 `Get-NetTCPConnection -State Listen | Where LocalPort -lt 65535` 找到实际监听端口，
+> 再同步改 git 配置。
 
 ## 一、首次配置（只需做一次）
 
 ```bash
-git config --global user.name "你的 GitHub 用户名"
-git config --global user.email "你的 GitHub 邮箱"
+git config --global user.name "wjzxly"
+git config --global user.email "161605703+wjzxly@users.noreply.github.com"
 ```
 
-邮箱建议用 GitHub 提供的匿名邮箱（在 GitHub → Settings → Emails 里可以查到），避免真实邮箱出现在公开提交记录里。
+已使用 GitHub 提供的匿名邮箱，真实邮箱不会出现在公开提交记录里。
 
 ## 二、创建远程仓库
 
-在 GitHub 上新建一个仓库，**不要**勾选 "Add a README" / ".gitignore" / "license"（本地已有，勾了会冲突）。
+在 GitHub 上新建一个仓库（https://github.com/new），**不要**勾选 "Add a README" / ".gitignore" / "license"（本地已有，勾了会冲突）。
 
-仓库名就用目录名：`parking-ga-core`。
+- Repository name：`parking-ga-core`
+- 可见性：Public（作品集必须公开，私有仓库招聘方看不到）
 
 ## 三、推送本仓库
 
+本地仓库已初始化、已按开发过程完成 7 次提交，只差最后一步：
+
 ```bash
 cd parking-ga-core
-git init -b main
-git add .
-git commit -m "feat: 停车场车位分配遗传算法求解器"
-git remote add origin https://github.com/<用户名>/parking-ga-core.git
+git remote add origin https://github.com/wjzxly/parking-ga-core.git
 git push -u origin main
 ```
 
-## 四、建议分步提交，而不是一次性 init
+首次推送会要求输入凭据：
 
-招聘方会看提交历史。一次性 `initial commit` 塞进所有文件，会显得项目是「临时糊出来的」。更真实的做法是按开发过程拆分：
+- 用户名：`wjzxly`
+- 密码：**粘贴 PAT**（不是你的 GitHub 登录密码，GitHub 早就不支持密码推送了）
 
-```bash
-git add parking_ga/models.py
-git commit -m "feat: 车位与许可领域模型"
+Windows 上 git 会把凭据存进「凭据管理器」，之后同一账号免密。
 
-git add parking_ga/fitness.py
-git commit -m "feat: 三维评分机制与适应度缓存"
+## 四、提交历史说明
 
-git add parking_ga/ga.py tests/
-git commit -m "feat: PMX 编码与模拟退火遗传算法，补充单元测试"
+本项目**未**使用一次性 `initial commit`，而是按开发顺序拆成了 7 次提交：
 
-git add parking_ga/datasets.py parking_ga/cli.py
-git commit -m "feat: 模拟车库生成器与命令行入口"
-
-git add README.md docs/ examples/
-git commit -m "docs: 补充算法推导、基准数据与使用说明"
+```
+chore: 忽略本地推送脚本
+docs: 补充算法推导、基准数据、部署说明与 CI 配置
+feat: 模拟车库生成器与命令行入口
+feat: PMX 排列编码与模拟退火遗传算法，补充 12 个单元测试
+feat: 三维评分机制与适应度缓存
+feat: 车位与许可领域模型
+chore: 初始化项目脚手架与打包配置
 ```
 
-commit message 用 `feat:` / `fix:` / `docs:` 前缀，是业界通行规范，一眼就知道你懂协作。
+招聘方看仓库时第一眼会扫提交历史。按功能拆分的历史能说明「这是逐步做出来的」，而不是「临时从别处拷来的」。
+
+后续开发继续沿用 `feat:` / `fix:` / `docs:` / `chore:` 前缀，这是 Conventional Commits 规范，也是团队协作的通行做法。
 
 ## 五、仓库设置清单
 
