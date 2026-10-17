@@ -1,0 +1,142 @@
+{
+  "summary": {
+    "slots": 32,
+    "permits": 25,
+    "baseline": 0.5933,
+    "elapsed_ms": 119.3
+  },
+  "history": [
+    0.6497,
+    0.6499,
+    0.6637,
+    0.6673,
+    0.669,
+    0.6732,
+    0.6773,
+    0.6848,
+    0.6848,
+    0.6866,
+    0.6903,
+    0.6903,
+    0.6975,
+    0.6982,
+    0.6999,
+    0.7006,
+    0.7016,
+    0.7066,
+    0.7066,
+    0.7066
+  ],
+  "solution": {
+    "assignments": [
+      {
+        "permit_id": "P001",
+        "slot_id": "A018"
+      },
+      {
+        "permit_id": "P002",
+        "slot_id": "A002"
+      },
+      {
+        "permit_id": "P003",
+        "slot_id": "A013"
+      },
+      {
+        "permit_id": "P004",
+        "slot_id": "A006"
+      },
+      {
+        "permit_id": "P005",
+        "slot_id": "A004"
+      },
+      {
+        "permit_id": "P006",
+        "slot_id": "A007"
+      },
+      {
+        "permit_id": "P007",
+        "slot_id": "A017"
+      },
+      {
+        "permit_id": "P008",
+        "slot_id": "A019"
+      },
+      {
+        "permit_id": "P009",
+        "slot_id": "A021"
+      },
+      {
+        "permit_id": "P010",
+        "slot_id": "A020"
+      },
+      {
+        "permit_id": "P011",
+        "slot_id": "A012"
+      },
+      {
+        "permit_id": "P012",
+        "slot_id": "A028"
+      },
+      {
+        "permit_id": "P013",
+        "slot_id": "A016"
+      },
+      {
+        "permit_id": "P014",
+        "slot_id": "A005"
+      },
+      {
+        "permit_id": "P015",
+        "slot_id": "A010"
+      },
+      {
+        "permit_id": "P016",
+        "slot_id": "A022"
+      },
+      {
+        "permit_id": "P017",
+        "slot_id": "A026"
+      },
+      {
+        "permit_id": "P018",
+        "slot_id": "A003"
+      },
+      {
+        "permit_id": "P019",
+        "slot_id": "A029"
+      },
+      {
+        "permit_id": "P020",
+        "slot_id": "A030"
+      },
+      {
+        "permit_id": "P021",
+        "slot_id": "A015"
+      },
+      {
+        "permit_id": "P022",
+        "slot_id": "A023"
+      },
+      {
+        "permit_id": "P023",
+        "slot_id": "A011"
+      },
+      {
+        "permit_id": "P024",
+        "slot_id": "A025"
+      },
+      {
+        "permit_id": "P025",
+        "slot_id": "A032"
+      }
+    ],
+    "scores": {
+      "walking": 0.8394,
+      "category": 0.4356,
+      "usage": 0.7812,
+      "total": 0.7066
+    },
+    "unassigned": 0,
+    "generation": 20
+  }
+}
