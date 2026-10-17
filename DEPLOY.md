@@ -47,26 +47,69 @@ git config --global user.email "161605703+wjzxly@users.noreply.github.com"
 
 ## 三、推送本仓库
 
-本地仓库已初始化、已按开发过程完成 7 次提交，只差最后一步：
+本地仓库已初始化、已按开发过程完成 8 次提交，只差最后一步。
+
+本项目采用 **SSH 方式推送**（原因见下方「为什么不用 PAT」）：
 
 ```bash
 cd parking-ga-core
-git remote add origin https://github.com/wjzxly/parking-ga-core.git
+git remote add origin git@github.com:wjzxly/parking-ga-core.git
 git push -u origin main
 ```
 
-首次推送会要求输入凭据：
+推送前先验证 SSH 认证是否就绪：
 
-- 用户名：`wjzxly`
-- 密码：**粘贴 PAT**（不是你的 GitHub 登录密码，GitHub 早就不支持密码推送了）
+```bash
+ssh -T git@github.com
+```
 
-Windows 上 git 会把凭据存进「凭据管理器」，之后同一账号免密。
+- 返回 `Hi wjzxly! You've successfully authenticated...` → 可以推
+- 返回 `Permission denied (publickey)` → 公钥还没加到 GitHub，见下一节
+
+### 配置 SSH 密钥（一次性）
+
+```bash
+# 1. 生成密钥（email 用 GitHub 匿名邮箱）
+ssh-keygen -t ed25519 -C "161605703+wjzxly@users.noreply.github.com" \
+  -f ~/.ssh/github_wjzxly_ed25519 -N ""
+
+# 2. 查看公钥并复制
+cat ~/.ssh/github_wjzxly_ed25519.pub
+```
+
+把输出的整行内容粘贴到 https://github.com/settings/ssh/new 并保存。
+
+`~/.ssh/config` 建议加上（指定用哪把密钥，避免多密钥冲突）：
+
+```
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/github_wjzxly_ed25519
+    IdentitiesOnly yes
+```
+
+### 为什么不用 PAT
+
+实测发现：fine-grained PAT（`github_pat_` 开头）如果权限没配对，会出现很迷惑的现象 ——
+
+- `GET /user` 成功，能读到用户名
+- `GET /repos/{owner}/{repo}` 返回 `permissions.push = true`
+- 但 `git push` 和 `PUT /contents/...` 全部 **403**
+
+原因是那个 `permissions` 字段描述的是**你账号对该仓库的权限**，不是**这个 token 被授予的权限**，两者容易被误读。如果一定要用 PAT：
+
+- 用 classic token（`ghp_` 开头），勾 `repo` + `workflow`
+- 或用 fine-grained，但必须在 `Repository access` 里选中具体仓库，并在 `Permissions → Contents` 设为 **Read and write**
+
+SSH 没有这个问题，配一次之后永久免密，也更适合长期开发。
 
 ## 四、提交历史说明
 
-本项目**未**使用一次性 `initial commit`，而是按开发顺序拆成了 7 次提交：
+本项目**未**使用一次性 `initial commit`，而是按开发顺序拆成了 8 次提交：
 
 ```
+docs: 补全 DEPLOY 中的代理端口表与提交历史说明
 chore: 忽略本地推送脚本
 docs: 补充算法推导、基准数据、部署说明与 CI 配置
 feat: 模拟车库生成器与命令行入口
